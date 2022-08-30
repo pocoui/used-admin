@@ -96,7 +96,7 @@ class MYRequest {
         .then((res) => {
           //单个请求对数据的处理
           if (config.interceptors?.responseInterceptor) {
-            // res = config.interceptors.responseInterceptor(res)
+            res = config.interceptors.responseInterceptor(res)
           }
           // //打印数据
           // console.log(res)
