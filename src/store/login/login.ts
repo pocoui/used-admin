@@ -9,6 +9,7 @@ import {
 import { IAccount } from '@/service/login/types'
 import LocalCache from '@/utils/cache'
 import router from '@/router'
+import { mapMenusToRoutes } from '@/utils/map-menu'
 
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -27,8 +28,14 @@ const loginModule: Module<ILoginState, IRootState> = {
     changeUserInfo(state, userInfo: any) {
       state.userInfo = userInfo
     },
-    changeMenu(state, userMenu: any) {
+    changeUserMenu(state, userMenu: any) {
       state.userMenu = userMenu
+      //添加动态路由
+      const routes = mapMenusToRoutes(userMenu)
+      // console.log(routes)
+      routes.forEach((route) => {
+        router.addRoute('main', route)
+      })
     }
   },
   actions: {
@@ -49,7 +56,7 @@ const loginModule: Module<ILoginState, IRootState> = {
       //请求用户菜单
       const userMenuResult = await requestUserMenuByRoleId(userInfo.role.id)
       const userMenu = userMenuResult.data
-      commit('changeMenu', userMenu)
+      commit('changeUserMenu', userMenu)
       LocalCache.setCache('userMenu', userMenu)
 
       //跳转到main
@@ -69,7 +76,7 @@ const loginModule: Module<ILoginState, IRootState> = {
 
       const userMenu = LocalCache.getCache('userMenu')
       if (userMenu) {
-        commit('changeUserMenus', userMenu)
+        commit('changeUserMenu', userMenu)
       }
     }
   }

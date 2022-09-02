@@ -1,5 +1,5 @@
-import { createStore } from 'vuex'
-import { IRootState } from './types'
+import { createStore, useStore as vuexUseStore, Store } from 'vuex'
+import { IRootState, IStoreType } from './types'
 
 import login from './login/login'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,4 +22,8 @@ export default store
 export function setupStore(): void {
   store.dispatch('login/loadLocalLogin')
   // store.dispatch('getInitialDataAction')
+}
+
+export function useStore(): Store<IStoreType> {
+  return vuexUseStore()
 }
